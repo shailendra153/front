@@ -11,13 +11,7 @@ exports.sendOtp = (request, response, next) => {
     request.session.otp = Math.floor((Math.random() * 10000) + 1);
     const message = "hello " + request.params.name + " Your One Time Password is :-" + request.session.otp;
     console.log(message);
-    const mailData = {
-        from: 'kushwahshailendra732@gmail.com',
-        to: email,
-        subject: "EMAIL VERIFICATION",
-        text: message
 
-    };
 
     function sendTextMessage() {
         client.messages.create({
@@ -28,22 +22,17 @@ exports.sendOtp = (request, response, next) => {
             })
             .then(() => {
                 console.log("message Send")
+                return response.status(500).json({ message: "error" });
             })
             .catch(err => {
                 console.log(err)
+                return response.status(200).json({ message: "sucesss" })
             })
     };
 
     sendTextMessage();
 
-    /* transporter.sendMail(mailData, function(err, info) {
-         if (err) {
-             console.log(err)
-             return response.status(500).json({ message: "error" });
 
-         } else
-             return response.status(200).json({ message: "sucesss" })
-     });*/
 
 
 };
@@ -61,13 +50,7 @@ exports.ragistrationByOtp = (request, response, next) => {
             .then(result => {
                 let message = "Congrats! " + result.name + " Your ragistratate email is " + result.email + " and your password is " + result.password;
 
-                const mailData = {
-                    from: 'kushwahshailendra732@gmail.com',
-                    to: result.email,
-                    subject: "Ragistration Success",
-                    text: message
 
-                };
 
                 function sendTextMessage() {
                     client.messages.create({
@@ -77,6 +60,8 @@ exports.ragistrationByOtp = (request, response, next) => {
 
                         })
                         .then(() => {
+                            request.session.otp = null;
+                            return response.status(201).json(result);
                             console.log("message Send")
                         })
                         .catch(err => {
@@ -86,18 +71,9 @@ exports.ragistrationByOtp = (request, response, next) => {
 
                 sendTextMessage();
 
-                /*   transporter.sendMail(mailData, function(err, info) {
-                       if (err) {
-                           console.log(err)
-                           return response.status(500).json({ message: "error" });
-
-                       } else
-                           return response.status(200).json({ message: "sucesss" })
-                   });*/
 
 
-                request.session.otp = null;
-                return response.status(201).json(result);
+
             })
             .catch(err => {
                 return response.status(500).json(err)
