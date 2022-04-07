@@ -36,14 +36,14 @@ exports.sendOtp = (request, response, next) => {
 
     sendTextMessage();
 
-    transporter.sendMail(mailData, function(err, info) {
-        if (err) {
-            console.log(err)
-            return response.status(500).json({ message: "error" });
+    /* transporter.sendMail(mailData, function(err, info) {
+         if (err) {
+             console.log(err)
+             return response.status(500).json({ message: "error" });
 
-        } else
-            return response.status(200).json({ message: "sucesss" })
-    });
+         } else
+             return response.status(200).json({ message: "sucesss" })
+     });*/
 
 
 };
@@ -86,14 +86,14 @@ exports.ragistrationByOtp = (request, response, next) => {
 
                 sendTextMessage();
 
-                transporter.sendMail(mailData, function(err, info) {
-                    if (err) {
-                        console.log(err)
-                        return response.status(500).json({ message: "error" });
+                /*   transporter.sendMail(mailData, function(err, info) {
+                       if (err) {
+                           console.log(err)
+                           return response.status(500).json({ message: "error" });
 
-                    } else
-                        return response.status(200).json({ message: "sucesss" })
-                });
+                       } else
+                           return response.status(200).json({ message: "sucesss" })
+                   });*/
 
 
                 request.session.otp = null;
