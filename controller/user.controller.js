@@ -22,11 +22,11 @@ exports.sendOtp = (request, response, next) => {
             })
             .then(() => {
                 console.log("message Send")
-                return response.status(500).json({ message: "error" });
+                return response.status(200).json({ message: "success" });
             })
             .catch(err => {
                 console.log(err)
-                return response.status(200).json({ message: "sucesss" })
+                return response.status(200).json({ message: "error" })
             })
     };
 
