@@ -20,3 +20,11 @@ exports.signup = (request, response, next) => {
         })
 
 }
+exports.signin=(request,response,next)=>{
+        Admin.findOne({email:request.body.email,
+                       password:request.body.password})
+                       .then(result=>{
+                           return response.status(201).json(result);
+                       })
+                       
+}
