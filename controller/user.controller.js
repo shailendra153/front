@@ -2,7 +2,6 @@ const { request, response } = require("express");
 const User = require('../model/user.model');
 const transporter = require('../mail/mail');
 
-const client = require('twilio')('AC8d3ddfa8db351b55246b1ed2d8df1bdc', '84a513b40ad4df5e7aa52b39cbe50c16');
 
 exports.sendOtp = (request, response, next) => {
     const email = request.params.email;
@@ -11,26 +10,25 @@ exports.sendOtp = (request, response, next) => {
     request.session.otp = Math.floor((Math.random() * 10000) + 1);
     const message = "hello " + request.params.name + " Your One Time Password is :-" + request.session.otp;
     console.log(message);
+    const mailData = {
+        from: 'kushwahshailendra732@gmail.com',
+        to: email,
+        subject: "EMAIL VERIFICATION",
+        text: message
 
-
-    function sendTextMessage() {
-        client.messages.create({
-                body: message,
-                to: mobile * 1,
-                from: +16292299782
-
-            })
-            .then(() => {
-                console.log("message Send")
-                return response.status(200).json({ message: "success" });
-            })
-            .catch(err => {
-                console.log(err)
-                return response.status(200).json({ message: "error" })
-            })
     };
+    transporter.sendMail(mailData, function(err, info) {
+        if (err) {
+            console.log(err)
+            return response.status(500).json({ message: "error" });
 
-    sendTextMessage();
+        } else
+            return response.status(200).json({ message: "sucesss" })
+    });
+
+
+
+
 
 
 
@@ -52,24 +50,7 @@ exports.ragistrationByOtp = (request, response, next) => {
 
 
 
-                function sendTextMessage() {
-                    client.messages.create({
-                            body: message,
-                            to: mobile * 1,
-                            from: +16292299782
 
-                        })
-                        .then(() => {
-                            request.session.otp = null;
-                            return response.status(201).json(result);
-                            console.log("message Send")
-                        })
-                        .catch(err => {
-                            console.log(err)
-                        })
-                };
-
-                sendTextMessage();
 
 
 
