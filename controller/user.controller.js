@@ -26,18 +26,12 @@ exports.sendOtp = (request, response, next) => {
             return response.status(200).json({ message: "sucesss" })
     });
 
-
-
-
-
-
-
-
 };
 exports.ragistrationByOtp = (request, response, next) => {
     const mobile = "+91" + request.body.number
     console.log(request.session.otp)
     console.log(request.body.otp)
+    console.log(request.body)
     if (request.session.otp == request.body.otp) {
         const user = new User();
         user.name = request.body.name;
@@ -46,8 +40,23 @@ exports.ragistrationByOtp = (request, response, next) => {
         user.password = request.body.password;
         user.save()
             .then(result => {
-                let message = "Congrats! " + result.name + " Your ragistratate email is " + result.email + " and your password is " + result.password;
+                let message = "Congrats! " + result.name + " Your ragistratate email is " + result.email + " and your password is " + result.password + "click the following link for Sign in http://localhost:4200/sign-in";
 
+                const mailData = {
+                    from: 'kushwahshailendra732@gmail.com',
+                    to: result.email,
+                    subject: "WEL COME  IN SAPNA JWELLERS",
+                    text: message
+
+                };
+                transporter.sendMail(mailData, function(err, info) {
+                    if (err) {
+                        console.log(err)
+                        return response.status(500).json({ message: "error" });
+
+                    } else
+                        return response.status(200).json({ message: "sucesss" })
+                });
 
 
 
@@ -57,6 +66,7 @@ exports.ragistrationByOtp = (request, response, next) => {
 
             })
             .catch(err => {
+                console.log(err)
                 return response.status(500).json(err)
             });
 

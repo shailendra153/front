@@ -1,4 +1,5 @@
 const Category = require('../model/category.model');
+const Product = require('../model/product.model');
 const { validationResult } = require('express-validator');
 const cloudinary = require('cloudinary');
 const { request } = require('express');
@@ -38,9 +39,16 @@ exports.saveCategory = async(request, response, next) => {
 exports.deleteCategory = (request, response, next) => {
     Category.deleteOne({ _id: request.params.categoryId })
         .then(result => {
-            if (result.deletedCount)
-                return response.status(202).json({ message: "Success" });
-            else
+            if (result.deletedCount) {
+                Product.deleteMany({ categoryId: request.params.categoryId })
+                    .then(res => {
+                        if (res.deletedCount)
+                            return response.status(202).json({ message: "Success" });
+                    })
+                    .then(err => {
+                        console.log(err);
+                    })
+            } else
                 return response.status(204).json({ message: "Not Found" });
 
         })
@@ -51,19 +59,19 @@ exports.deleteCategory = (request, response, next) => {
 };
 exports.updateCategory = async(request, response, next) => {
     let image;
-    console.log("1")
+
 
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
         console.log(errors)
         return response.status(400).json({ errors: errors.array() });
     }
-    console.log("2")
+
     const categoryName = request.body.categoryName;
     image = request.body.oldImage;
     console.log("old Image := " + image)
     if (request.file) {
-        console.log("yha nahi ana tha")
+
         await cloudinary.v2.uploader.upload(request.file.path)
             .then(result => {
                 image = result.url;
@@ -82,7 +90,7 @@ exports.updateCategory = async(request, response, next) => {
 
         })
         .then(result => {
-            console.log("3")
+
             if (result.modifiedCount)
                 return response.status(202).json({ message: "Success" });
             else

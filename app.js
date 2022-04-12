@@ -6,6 +6,7 @@ const adminRouter = require('./router/admin.router');
 const categoryRouter = require('./router/category.router');
 const productRouter = require('./router/product.router');
 const userRouter = require('./router/user.router');
+const cartRouter = require('./router/cart.router');
 const mongoose = require('mongoose');
 mongoose.connect("mongodb+srv://root:root@cluster0.gffjq.mongodb.net/artificialApp?retryWrites=true&w=majority")
     .then(() => {
@@ -21,6 +22,7 @@ app.use(session({ secret: "artificial web app" }));
 app.use('/admin', adminRouter)
 app.use('/category', categoryRouter)
 app.use('/product', productRouter);
+app.use('/cart', cartRouter);
 app.use('/user', userRouter);
 app.listen(process.env.PORT || 3000, () => {
     console.log('server is runing');
