@@ -1,6 +1,7 @@
 const { request, response } = require("express");
 const User = require('../model/user.model');
 const transporter = require('../mail/mail');
+const jwt = require('jsonwebtoken');
 
 
 exports.sendOtp = (request, response, next) => {
@@ -76,25 +77,27 @@ exports.ragistrationByOtp = (request, response, next) => {
     }
 };
 exports.customerSignIn = (request, response, next) => {
-    Customer.findOne({
-            customerEmail: request.body.customerEmail,
-            customerPassword: request.body.customerPassword
+    User.findOne({
+            customerEmail: request.body.email,
+            customerPassword: request.body.password
         })
         .then(result => {
-
-
             if (result) {
                 console.log(result);
-                let id = result._id;
+                console.log('login Successful');
+                let payload = { subject: result._id };
+                let token = jwt.sign(payload, 'adkgshubhambahutsamjhhdarhkabhigaltinhikrteckjbgjkab');
 
-                console.log(id);
-                request.session.customer = id;
-                return response.status(302).json(result);
-            } else
-                return response.status(204).json({ message: "User not found" })
-        })
-        .catch(err => {
-            console.log(err)
-            return response.status(500).json({ message: "Oops Something Went Wrong" });
+                return response.status(201).json({
+                    status: true,
+                    result: result,
+                    token: token
+                });
+            } else {
+                console.log('login Failure');
+            }
+        }).catch(err => {
+            console.log(err + 'Somthing went wrong');
+            return response.status(500).json(err);
         })
 };
