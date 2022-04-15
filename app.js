@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const bodyParser = require('body-parser');
 const session = require('express-session');
@@ -16,7 +17,7 @@ mongoose.connect("mongodb+srv://root:root@cluster0.gffjq.mongodb.net/artificialA
     .catch(err => {
         console.log(err);
     });
-
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(session({ secret: "artificial web app" }));
