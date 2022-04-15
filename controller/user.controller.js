@@ -23,8 +23,8 @@ exports.customerSignup = (request, response, next) => {
 
 exports.customerSignIn = (request, response, next) => {
     User.findOne({
-            customerEmail: request.body.email,
-            customerPassword: request.body.password
+            email: request.body.email,
+            password: request.body.password
         })
         .then(result => {
             if (result) {
@@ -48,7 +48,7 @@ exports.customerSignIn = (request, response, next) => {
 };
 exports.customerSignInWithGoole = (request, response, next) => {
     User.findOne({
-            customerEmail: request.body.email
+            email: request.body.email
         })
         .then(result => {
             if (result) {
