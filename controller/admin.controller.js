@@ -6,7 +6,7 @@ const { response } = require('express');
 exports.signup = (request, response, next) => {
     console.log(request.body)
     const admin = new Admin();
-    admin.userName = request.body.userName;
+    admin.name = request.body.name;
     admin.email = request.body.email;
     admin.number = request.body.number;
     admin.password = request.body.password;
@@ -28,7 +28,23 @@ exports.signin = (request, response, next) => {
             password: request.body.password
         })
         .then(result => {
-            return response.status(201).json(result);
+            if (result) {
+                console.log(result);
+                console.log('login Successful');
+                let payload = { subject: result._id };
+                let token = jwt.sign(payload, 'adkgshubhambahutsamjhhdarhkabhigaltinhikrteckjbgjkab');
+
+                return response.status(201).json({
+                    status: true,
+                    result: result,
+                    token: token
+                });
+            } else {
+                console.log('login Failure');
+            }
+        }).catch(err => {
+            console.log(err + 'Somthing went wrong');
+            return response.status(500).json(err);
         })
 
 }
