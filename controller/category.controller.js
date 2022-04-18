@@ -42,8 +42,8 @@ exports.deleteCategory = (request, response, next) => {
             if (result.deletedCount) {
                 Product.deleteMany({ categoryId: request.params.categoryId })
                     .then(res => {
-                        if (res.deletedCount)
-                            return response.status(202).json({ message: "Success" });
+
+                        return response.status(202).json({ message: "Success" });
                     })
                     .then(err => {
                         console.log(err);
