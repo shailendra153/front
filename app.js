@@ -13,20 +13,21 @@ const mongoose = require('mongoose');
 mongoose.connect("mongodb+srv://root:root@cluster0.gffjq.mongodb.net/artificialApp?retryWrites=true&w=majority")
     .then(() => {
         console.log("Database Connection SuccessFully Estabilished");
+
+        app.use(cors());
+        app.use(bodyParser.urlencoded({ extended: false }));
+        app.use(bodyParser.json());
+        app.use(session({ secret: "artificial web app" }));
+        app.use('/admin', adminRouter)
+        app.use('/category', categoryRouter)
+        app.use('/product', productRouter);
+        app.use('/cart', cartRouter);
+        app.use('/favorite', favoriteRouter);
+        app.use(userRouter);
+        app.listen(process.env.PORT || 3000, () => {
+            console.log('server is runing');
+        });
     })
     .catch(err => {
         console.log(err);
     });
-app.use(cors());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(session({ secret: "artificial web app" }));
-app.use('/admin', adminRouter)
-app.use('/category', categoryRouter)
-app.use('/product', productRouter);
-app.use('/cart', cartRouter);
-app.use('/favorite', favoriteRouter);
-app.use(userRouter);
-app.listen(process.env.PORT || 3000, () => {
-    console.log('server is runing');
-});

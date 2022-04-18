@@ -39,7 +39,7 @@ exports.customerSignIn = (request, response, next) => {
                     token: token
                 });
             } else {
-                console.log('login Failure');
+                return response.status(404).jsaon({ message: "User Not Found" })
             }
         }).catch(err => {
             console.log(err + 'Somthing went wrong');
@@ -63,10 +63,11 @@ exports.customerSignInWithGoole = (request, response, next) => {
                     token: token
                 });
             } else {
-                console.log('login Failure');
+                return response.status(404).json({ messgae: "User Not Found" })
             }
         }).catch(err => {
             console.log(err + 'Somthing went wrong');
             return response.status(500).json(err);
         })
+
 };
