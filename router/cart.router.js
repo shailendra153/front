@@ -3,8 +3,8 @@ const cartController = require('../controller/cart.controller');
 const verify = require('../middleware/auth');
 const router = express.Router();
 
-router.post("/add-product", verify.tokenVerification, cartController.addItemInCart);
-router.post("/remove-product", verify.tokenVerification, cartController.removeItemFromCart);
-router.post('/view-cart', verify.tokenVerification, cartController.fetchCart)
+router.post("/add-product", cartController.addItemInCart);
+router.post("/remove-product", cartController.removeItemFromCart);
+router.post('/view-cart', cartController.fetchCart)
 
 module.exports = router;
